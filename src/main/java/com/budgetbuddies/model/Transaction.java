@@ -1,4 +1,3 @@
-
 package com.budgetbuddies.model;
 
 import java.math.BigDecimal;
@@ -7,6 +6,7 @@ import java.sql.Date;
 public class Transaction {
     private String T_id;
     private String T_title;
+    private String T_description;
     private String T_type;
     private BigDecimal T_amount;
     private Date T_transaction_date;
@@ -17,12 +17,14 @@ public class Transaction {
     }
 
     public Transaction(String T_id, String T_title,
-                       String T_type, BigDecimal T_amount,
+                       String T_description, String T_type,
+                       BigDecimal T_amount,
                        Date T_transaction_date,
                        String Accounts_A_id,
                        String Categories_C_id) {
         this.T_id = T_id;
         this.T_title = T_title;
+        this.T_description = T_description;
         this.T_type = T_type;
         this.T_amount = T_amount;
         this.T_transaction_date = T_transaction_date;
@@ -44,6 +46,14 @@ public class Transaction {
 
     public void setT_title(String T_title) {
         this.T_title = T_title;
+    }
+
+    public String getT_description() {
+        return T_description;
+    }
+
+    public void setT_description(String T_description) {
+        this.T_description = T_description;
     }
 
     public String getT_type() {

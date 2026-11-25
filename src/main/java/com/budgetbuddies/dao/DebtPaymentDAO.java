@@ -117,6 +117,37 @@ public class DebtPaymentDAO {
         return payments;
     }
 
+    // READ: Menampilkan satu debt payment berdasarkan ID dan user
+public DebtPayment findById(String id, String userId) {
+    String sql = "SELECT DP.* FROM Debt_Payments DP " +
+        "JOIN Debts D ON DP.Debts_D_id = D.D_id " +
+        "WHERE DP.DP_id = ? AND D.Users_U_id = ?";
+
+    try (Connection conn = DBConnection.getConnection();
+         PreparedStatement ps = conn.prepareStatement(sql)) {
+
+        ps.setString(1, id);
+        ps.setString(2, userId);
+
+        try (ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) {
+                return new DebtPayment(
+                    rs.getString("DP_id"),
+                    rs.getBigDecimal("DP_amount"),
+                    rs.getDate("DP_payment_date"),
+                    rs.getString("DP_notes"),
+                    rs.getString("Debts_D_id")
+                );
+            }
+        }
+
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+
+    return null;
+}
+
     // UPDATE
     public boolean updateDebtPayment(DebtPayment payment, String userId) {
         String findSql = "SELECT DP.DP_amount, DP.Debts_D_id " +

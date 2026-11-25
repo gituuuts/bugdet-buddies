@@ -93,6 +93,45 @@ public class RecurringTransactionDAO {
         return transactions;
     }
 
+// READ: Menampilkan satu recurring transaction berdasarkan ID dan user
+public RecurringTransaction findById(String id, String userId) {
+    String sql = "SELECT RT.* FROM Recurring_Transactions RT " +
+        "JOIN Accounts A ON RT.Accounts_A_id = A.A_id " +
+        "JOIN Categories C ON RT.Categories_C_id = C.C_id " +
+        "WHERE RT.RT_id = ? " +
+        "AND A.Users_U_id = ? AND C.Users_U_id = ?";
+
+    try (Connection conn = DBConnection.getConnection();
+         PreparedStatement ps = conn.prepareStatement(sql)) {
+
+        ps.setString(1, id);
+        ps.setString(2, userId);
+        ps.setString(3, userId);
+
+        try (ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) {
+                return new RecurringTransaction(
+                    rs.getString("RT_id"),
+                    rs.getString("RT_title"),
+                    rs.getString("RT_type"),
+                    rs.getBigDecimal("RT_amount"),
+                    rs.getString("RT_frequency"),
+                    rs.getDate("RT_start_date"),
+                    rs.getDate("RT_end_date"),
+                    rs.getDate("RT_next_date"),
+                    rs.getString("RT_status"),
+                    rs.getString("Accounts_A_id"),
+                    rs.getString("Categories_C_id")
+                );
+            }
+        }
+
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+
+    return null;
+}
     // UPDATE
     public boolean updateRecurringTransaction(
             RecurringTransaction transaction, String userId) {

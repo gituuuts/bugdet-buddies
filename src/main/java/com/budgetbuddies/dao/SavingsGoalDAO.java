@@ -70,6 +70,37 @@ public class SavingsGoalDAO {
         return goals;
     }
 
+// READ: Menampilkan satu savings goal berdasarkan ID dan user
+public SavingsGoal findById(String id, String userId) {
+    String sql = "SELECT * FROM Savings_Goals " +
+                 "WHERE SG_id = ? AND Users_U_id = ?";
+
+    try (Connection conn = DBConnection.getConnection();
+         PreparedStatement ps = conn.prepareStatement(sql)) {
+
+        ps.setString(1, id);
+        ps.setString(2, userId);
+
+        try (ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) {
+                return new SavingsGoal(
+                    rs.getString("SG_id"),
+                    rs.getString("SG_name"),
+                    rs.getBigDecimal("SG_target_amount"),
+                    rs.getBigDecimal("SG_current_amount"),
+                    rs.getDate("SG_target_date"),
+                    rs.getString("SG_status"),
+                    rs.getString("Users_U_id")
+                );
+            }
+        }
+
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+
+    return null;
+}
     // UPDATE
     public boolean updateSavingsGoal(SavingsGoal goal) {
         String sql = "UPDATE Savings_Goals SET " +

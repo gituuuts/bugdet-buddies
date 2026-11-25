@@ -74,7 +74,38 @@ public class DebtDAO {
     }
 
     // UPDATE
+// READ: Menampilkan satu debt berdasarkan ID dan user
+public Debt findById(String id, String userId) {
+    String sql = "SELECT * FROM Debts " +
+                 "WHERE D_id = ? AND Users_U_id = ?";
 
+    try (Connection conn = DBConnection.getConnection();
+         PreparedStatement ps = conn.prepareStatement(sql)) {
+
+        ps.setString(1, id);
+        ps.setString(2, userId);
+
+        try (ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) {
+                return new Debt(
+                    rs.getString("D_id"),
+                    rs.getString("D_name"),
+                    rs.getString("D_type"),
+                    rs.getBigDecimal("D_total_amount"),
+                    rs.getBigDecimal("D_remaining_amount"),
+                    rs.getDate("D_due_date"),
+                    rs.getString("D_status"),
+                    rs.getString("Users_U_id")
+                );
+            }
+        }
+
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+
+    return null;
+}
     // UPDATE
     public boolean updateDebt(Debt debt) {
         String checkSql = "SELECT D_total_amount, D_remaining_amount " +

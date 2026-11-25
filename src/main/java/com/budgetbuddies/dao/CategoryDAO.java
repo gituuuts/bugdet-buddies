@@ -61,6 +61,34 @@ public class CategoryDAO {
         return categories;
     }
 
+// READ: Menampilkan satu kategori berdasarkan ID dan user
+public Category findById(String id, String userId) {
+    String sql = "SELECT * FROM Categories WHERE C_id = ? AND Users_U_id = ?";
+
+    try (Connection conn = DBConnection.getConnection();
+         PreparedStatement ps = conn.prepareStatement(sql)) {
+
+        ps.setString(1, id);
+        ps.setString(2, userId);
+
+        try (ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) {
+                return new Category(
+                    rs.getString("C_id"),
+                    rs.getString("C_name"),
+                    rs.getString("C_type"),
+                    rs.getString("Users_U_id")
+                );
+            }
+        }
+
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+
+    return null;
+}
+
     // UPDATE
     public boolean updateCategory(Category category) {
         String sql = "UPDATE Categories SET C_name = ?, C_type = ? " +
