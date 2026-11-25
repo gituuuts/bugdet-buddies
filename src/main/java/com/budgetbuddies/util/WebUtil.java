@@ -17,7 +17,7 @@ public final class WebUtil {
      * SEMENTARA untuk development sebelum login Anggota 3 selesai.
      * Set false (atau hapus) setelah authentication jadi.
      */
-    private static final boolean DEV_MODE = true;
+    private static final boolean DEV_MODE = false;
     private static final String DEV_USER_ID = "U00001"; // user dari seed.sql
 
     private WebUtil() {
