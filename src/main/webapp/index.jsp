@@ -1,5 +1,3 @@
-<html>
-<body>
-<h2>Hello World!</h2>
-</body>
-</html>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%-- Sementara diarahkan ke Transaksi. Ganti ke /dashboard setelah dashboard.jsp jadi. --%>
+<c:redirect url="/transactions"/>
